@@ -1,16 +1,18 @@
-import { Request, Response } from 'express';
 import { AuthServices } from './auth.service';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import status from 'http-status';
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = catchAsync(async (req, res) => {
   const result = await AuthServices.createUserIntoDB(req.body);
 
-  res.status(201).json({
+  sendResponse(res, {
     success: true,
     message: 'User registered successfully',
-    statusCode: 201,
+    statusCode: status.CREATED,
     data: result,
   });
-};
+});
 
 export const AuthControllers = {
   createUser,

@@ -20,7 +20,7 @@ async function main() {
 main();
 
 process.on('unhandledRejection', () => {
-  console.error('Unhandled Rejection, shutting down the server.');
+  console.log('Unhandled Rejection, shutting down the server.');
   if (server) {
     server.close(() => {
       process.exit(1);
@@ -30,6 +30,6 @@ process.on('unhandledRejection', () => {
 });
 
 process.on('uncaughtException', () => {
-  console.error('Uncaught Exception, shutting down the server.');
+  console.log('Uncaught Exception, shutting down the server.');
   process.exit(1);
 });
