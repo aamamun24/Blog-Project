@@ -11,4 +11,6 @@ router.post(
   AuthControllers.createUser,
 );
 
+router.post('/login', AuthControllers.authLogin);
+
 export const AuthRoutes = router;
