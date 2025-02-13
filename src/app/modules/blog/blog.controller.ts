@@ -20,6 +20,33 @@ const createBlog = catchAsync(async (req, res) => {
   });
 });
 
+const updateBlog = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.userId;
+
+  const result = await BlogServices.updateBlogIntoDB(id, userId, req.body);
+
+  sendResponse(res, {
+    success: true,
+    message: 'Blog updated successfully',
+    statusCode: status.OK,
+    data: result,
+  });
+});
+
+const getAllBlogs = catchAsync(async (req, res) => {
+  const result = await BlogServices.getAllBlogsFromDB();
+
+  sendResponse(res, {
+    success: true,
+    message: 'Blogs fetched successfully',
+    statusCode: status.OK,
+    data: result,
+  });
+});
+
 export const BlogControllers = {
   createBlog,
+  updateBlog,
+  getAllBlogs,
 };
