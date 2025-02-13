@@ -5,6 +5,7 @@ import AppError from '../../errors/AppError';
 import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
 import { ILoginUser } from './auth.interface';
+import config from '../../config';
 
 const createUserIntoDB = async (payload: IUser) => {
   const existingEmail = await User.findOne({ email: payload?.email });
@@ -41,7 +42,9 @@ const loginUser = async (payload: ILoginUser) => {
     role: user?.role,
   };
 
-  const token = jwt.sign(jwtPayload, 'secret', { expiresIn: '1d' });
+  const token = jwt.sign(jwtPayload, config.jwt_access_token_secret as string, {
+    expiresIn: '1d',
+  });
   return { token };
 };
 
