@@ -34,6 +34,21 @@ const updateBlogIntoDB = async (
   return result;
 };
 
+const deleteBlogFromDB = async (id: string, userId: string) => {
+  const blog = await Blog.findById(id);
+
+  if (!blog) {
+    throw new AppError(status.NOT_FOUND, 'Blog not found');
+  }
+
+  if (blog?.author.toString() !== userId) {
+    throw new AppError(
+      status.FORBIDDEN,
+      'You are not authorized to delete this blog!',
+    );
+  }
+};
+
 const getAllBlogsFromDB = async () => {
   const result = await Blog.find().populate('author');
   return result;
@@ -42,5 +57,6 @@ const getAllBlogsFromDB = async () => {
 export const BlogServices = {
   createBlogIntoDB,
   updateBlogIntoDB,
+  deleteBlogFromDB,
   getAllBlogsFromDB,
 };

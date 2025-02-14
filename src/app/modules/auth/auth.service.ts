@@ -19,7 +19,9 @@ const createUserIntoDB = async (payload: IUser) => {
 };
 
 const loginUser = async (payload: ILoginUser) => {
-  const user = await User.findOne({ email: payload?.email });
+  const user = await User.findOne({ email: payload?.email }).select(
+    '+password',
+  );
 
   if (!user) {
     throw new AppError(status.UNAUTHORIZED, 'User does not exit');
