@@ -5,7 +5,13 @@ import status from 'http-status';
 import config from '../../config';
 
 const createUser = catchAsync(async (req, res) => {
-  const result = await AuthServices.createUserIntoDB(req.body);
+  const data = await AuthServices.createUserIntoDB(req.body);
+
+  const result = {
+    _id: data._id,
+    name: data.name,
+    email: data.email,
+  };
 
   sendResponse(res, {
     success: true,

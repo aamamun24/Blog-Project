@@ -8,9 +8,17 @@ const createBlog = catchAsync(async (req, res) => {
     title: req.body.title,
     content: req.body.content,
     author: req.user.userId,
+    isPublished: req.body.isPublished,
   };
 
-  const result = await BlogServices.createBlogIntoDB(payloadData);
+  const data = await BlogServices.createBlogIntoDB(payloadData);
+
+  const result = {
+    _id: data._id,
+    title: data.title,
+    content: data.content,
+    author: data.author,
+  };
 
   sendResponse(res, {
     success: true,

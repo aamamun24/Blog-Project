@@ -54,7 +54,9 @@ const deleteBlogFromDB = async (id: string, userId: string, role: string) => {
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   const blogsQuery = new QueryBuilder(
-    Blog.find().populate({ path: 'author', select: '-__v' }).select('-__v'),
+    Blog.find()
+      .populate({ path: 'author', select: '+_id name email role' })
+      .select('+_id title content'),
     query,
   )
     .search(['title', 'content'])
