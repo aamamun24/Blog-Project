@@ -8,19 +8,19 @@ const router = Router();
 
 router.post(
   '/',
-  auth,
+  auth('user'),
   validateRequest(BlogValidations.createBlogValidationSchema),
   BlogControllers.createBlog,
 );
 
 router.patch(
   '/:id',
-  auth,
+  auth('user'),
   validateRequest(BlogValidations.updateBlogValidationSchema),
   BlogControllers.updateBlog,
 );
 
-router.delete('/:id', auth, BlogControllers.deleteBlog);
+router.delete('/:id', auth('user'), BlogControllers.deleteBlog);
 
 router.get('/', BlogControllers.getAllBlogs);
 

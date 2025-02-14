@@ -35,19 +35,21 @@ const updateBlogIntoDB = async (
   return result;
 };
 
-const deleteBlogFromDB = async (id: string, userId: string) => {
+const deleteBlogFromDB = async (id: string, userId: string, role: string) => {
   const blog = await Blog.findById(id);
 
   if (!blog) {
     throw new AppError(status.NOT_FOUND, 'Blog not found');
   }
 
-  if (blog?.author.toString() !== userId) {
+  if (blog?.author.toString() !== userId && role !== 'admin') {
     throw new AppError(
       status.FORBIDDEN,
       'You are not authorized to delete this blog!',
     );
   }
+
+  await Blog.findByIdAndDelete(id);
 };
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
@@ -57,7 +59,7 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   )
     .search(['title', 'content'])
     .sort()
-    .filter();
+    .authorFilter();
 
   const result = await blogsQuery.modelQuery;
   return result;

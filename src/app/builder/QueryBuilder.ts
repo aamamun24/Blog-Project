@@ -33,23 +33,18 @@ class QueryBuilder<T> {
     return this;
   }
 
-  filter() {
+  authorFilter() {
     const queryObj = { ...this.query };
 
-    const authorFilter = queryObj.author as string;
-    delete queryObj.author;
-
-    const excludeFields = ['search', 'sortBy', 'sortOrder', 'filter'];
+    const excludeFields = ['search', 'sortBy', 'sortOrder'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    let filterQuery = { ...queryObj };
-
-    // Apply author filter if present
-    if (authorFilter) {
-      filterQuery = { ...filterQuery, author: authorFilter };
+    if (this.query.filter) {
+      queryObj.author = this.query.filter;
+      delete queryObj.filter;
     }
 
-    this.modelQuery = this.modelQuery.find(filterQuery as FilterQuery<T>);
+    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;
   }
