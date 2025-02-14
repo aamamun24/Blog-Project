@@ -2,6 +2,7 @@ import status from 'http-status';
 import AppError from '../../errors/AppError';
 import { IBlog } from './blog.interface';
 import { Blog } from './blog.model';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const createBlogIntoDB = async (payload: IBlog) => {
   const result = await Blog.create(payload);
@@ -49,8 +50,16 @@ const deleteBlogFromDB = async (id: string, userId: string) => {
   }
 };
 
-const getAllBlogsFromDB = async () => {
-  const result = await Blog.find().populate('author');
+const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+  const blogsQuery = new QueryBuilder(
+    Blog.find().populate({ path: 'author', select: '-__v' }).select('-__v'),
+    query,
+  )
+    .search(['title', 'content'])
+    .sort()
+    .filter();
+
+  const result = await blogsQuery.modelQuery;
   return result;
 };
 
