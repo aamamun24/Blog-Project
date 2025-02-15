@@ -21,6 +21,8 @@ app.get('/', testRoute);
 
 app.use(globalErrorHandler);
 
-app.use(notFound);
+app.use((req, res, next) => {
+  notFound(req, res, next);
+});
 
 export default app;
